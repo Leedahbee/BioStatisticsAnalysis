@@ -23,3 +23,199 @@ penguins %>% head()
 ```
 
 Data chart compiling bill length, flipper length, bill depth, and body mass measurements of six male Gentoo penguins living on the island of Biscoe.
+
+# Data Manipulation
+
+Understanding coding in R using a given data set to practice how to manipulate & summarize using R. Specifically learning to filter rows, subset columns, group data, and compute summary statistics.
+
+-   Were there any significant outliers in the data set?
+
+-   If there were outliers, how did they skew the rest of the data?
+
+```{r}
+penguins %>%
+  count(island)
+```
+
+There is a much larger set of data for penguins on the island of Biscoe compared to Dream and Torgersen.
+
+```{r}
+penguins %>%
+  count(species)
+```
+
+There are three species of penguins in this data set, with Gentoo being the most populous by a lot compared to Adelie, and Chinstrap.
+
+```{r}
+penguins %>%
+  count(island, species)
+```
+
+Generated table displaying data of the number of penguins of each species and which island they were found on.
+
+```{r}
+penguins %>%
+  count (island, species) %>%
+  pivot_wider(names_from = species, values_from = n, values_fill = 0)
+```
+
+Simplified the data presentation in order to make it more readable, assigned a value of zero in the table for categories for which no data was gathered, for instance, no Gentoo penguins on the island of Torgersen.
+
+```{r}
+penguins %>%
+  count(island, species) %>%
+  pivot_wider(names_from = species, values_from = n, values_fill =0) %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("hover", "striped"))
+```
+
+Applied cosmetic styling to make the data set more readable.
+
+```{r}
+penguins %>%
+  summarize(mean_bill_length_mm = mean (bill_length_mm))
+```
+
+Computed the mean value but some data is missing modify code and resend
+
+```{r}
+penguins %>%
+  summarize(mean_bill_length_mm = mean(bill_length_mm, na.rm = TRUE))
+```
+
+Mean properly presented, making absent data as NA so it does not affect further calculations/data manipulations.
+
+```{r}
+penguins %>%
+  summarize(
+    min_bill_length = min(bill_length_mm, na.rm = TRUE),
+    first_quartile_bill_length = quantile(bill_length_mm, 0.25, na.rm = TRUE),
+    median_bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+    third_quartile_bill_length = quantile(bill_length_mm, 0.75, na.rm = TRUE),
+    standard_deviation_bill_length = sd(bill_length_mm, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = everything())
+```
+
+Long table presenting the table of calculated data
+
+```{r}
+penguins %>%
+  summarize(
+    min_bill_length = min(bill_length_mm, na.rm = TRUE),
+    first_quartile_bill_length = quantile(bill_length_mm, 0.25, na.rm = TRUE),
+    median_bill_length = median(bill_length_mm, na.rm = TRUE),
+    mean_bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+    third_quartile_bill_length = quantile(bill_length_mm, 0.75, na.rm = TRUE),
+    standard_deviation_bill_length = sd(bill_length_mm, na.rm = TRUE)
+    )
+```
+
+Very wide table, harder to digest, and not as aesthetically pleasing.
+
+```{r}
+penguins %>%
+  summarize(
+    min_bill_length = min(bill_length_mm, na.rm = TRUE),
+    first_quartile_bill_length = quantile(bill_length_mm, 0.25, na.rm = TRUE),
+    median_bill_length = median(bill_length_mm, na.rm = TRUE),
+    mean_bill_length_mm = mean(bill_length_mm, na.rm = TRUE),
+    third_quartile_bill_length = quantile(bill_length_mm, 0.75, na.rm = TRUE),
+    standard_deviation_bill_length = sd(bill_length_mm, na.rm = TRUE)
+    ) %>%
+  pivot_longer(cols = everything()) %>%
+kable() %>%
+  kable_styling(bootstrap_options = c("hover", "striped"))
+```
+
+Added striped pattern and column titles.
+
+```{r}
+penguins %>%
+  select(species, island, sex, year)
+```
+
+Selected only data for species island sex and year.
+
+```{r}
+penguins %>%
+  select(species, island, sex, year) %>%
+  filter(species == "Chinstrap")
+```
+
+Filtered data set by species displaying only data for Chinstrap penguins.
+
+```{r}
+chinstraps <- penguins %>%
+  select(species, island, sex, year) %>%
+  filter(species == "Chinstrap") %>%
+  select(-species)
+
+chinstraps %>%
+  head()
+```
+
+Filtered out species. Now, displaying only island, sex, and year.
+
+```{r}
+penguins %>%
+  group_by(species) %>%
+  summarise(
+    mean_bill_depth_mm = mean(bill_depth_mm, na.rm = TRUE),
+    sd_bill_depth_mm = sd(bill_depth_mm, na.rm = TRUE)
+  )
+```
+
+Calculates the mean and standard deviations of the bill depths for the penguins organized by species. Chinstrap penguins have significantly greater bill depths when compared to the other species of penguins.
+
+```{r}
+penguins %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = species)) +
+  labs(tile ="Counts of Penguin Species",
+       x = "Species", y = "Count")
+```
+
+Basic black and white bar graph of the population of penguins organized by breed. There is a much larger population of Gentoo penguins compared to the other species. Plus signs (+) allow me to add the next line of code to the last effectively creating a chain of commands.
+
+```{r}
+penguins %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = island)) +
+  labs(title ="Population Dispersal by Island", x= "Island", y = "Count")
+```
+
+Using the same code logic, I was able to create a bar graph that shows the population of the penguins by island. This really puts into perspective how penguin populous Biscoe is in comparison to the other two islands.
+
+```{r}
+penguins %>%
+  ggplot() +
+  geom_histogram(mapping = aes(x = bill_length_mm),
+                 color = "white",
+                 fill = "blue") +
+  labs(title ="Distribution of Bill Lengths",
+       x = "Bill Length (mm)", y = "Count")
+```
+
+The graph shows there are a wide range of Bill Lengths with a large majority of the penguins having bill lengths between 45 and 50mm.\
+
+```{r}
+penguins %>%
+  ggplot() +
+  geom_point(mapping = aes(x = bill_depth_mm, y = bill_length_mm)) +
+  labs(title = "Bill Depth and Length",
+       x = "Bill Depth (mm)",
+       y = "Bill Length (mm)")
+```
+
+\
+This plot shows us the bill depth is much more widely varied compared to the more bell curve standard shape of the bill length. The bill depth has a lot more data skewed lower.
+
+```{r}
+penguins %>%
+  ggplot() +
+  geom_point(mapping = aes(x = sex, y = bill_length_mm)) +
+  labs(title = "Bill Length and Sex",
+       x = "Sex",
+       y = "Bill Length (mm)")
+```
