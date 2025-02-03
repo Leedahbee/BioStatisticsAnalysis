@@ -1,0 +1,63 @@
+---
+title: "BioStats Project: Dog Breeds"
+format: html
+editor: visual
+execute:
+  keep-md: true
+---
+
+## Dog Breeds Biostatistical Analysis
+
+Analysis of traits of dogs by breed.
+
+```{r}
+#install.packages("tidytuesdayR")
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load('2022-02-01')
+```
+
+```{r}
+breed_traits <- tuesdata$breed_traits
+```
+
+```{r}
+breed_traits <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-02-01/breed_traits.csv")
+```
+
+```{r}
+trait_description <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-02-01/trait_description.csv")
+```
+
+```{r}
+breed_rank_all <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2022/2022-02-01/breed_rank.csv')
+```
+
+```{r}
+breed_traits
+```
+
+```{r}
+trait_description
+```
+
+```{r}
+breed_rank_all
+```
+
+```{r}
+#install.packages("tidymodels")
+library(tidymodels)
+
+my_data_splits <- initial_split(breed_traits, prop = 0.5)
+
+exploratory_data <- training(my_data_splits)
+test_data <- testing(my_data_splits)
+```
+
+# Hypotheses
+
+If there is truth to the idea of “Little Dog Syndrome,” then smaller dog breeds will score unfavorably for trait scores in openness to strangers, trainability, energy level, and barking level.
+
+If there is truth to the social idea of big dogs being “Gentle Giants,” then larger dog breeds will score favorably in good with young children and other dogs, openness to strangers, and watchdog/protective nature.
