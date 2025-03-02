@@ -53,11 +53,6 @@ breed_rank_all
 ```{r}
 #install.packages("tidymodels")
 library(tidymodels)
-
-my_data_splits <- initial_split(breed_traits, prop = 0.5)
-
-exploratory_data <- training(my_data_splits)
-test_data <- testing(my_data_splits)
 ```
 
 ```{r}
@@ -75,8 +70,6 @@ library(tidyverse)
 
 ```{r}
 #install.packages("janitor")
-names(exploratory_data)<-
-  janitor::make_clean_names(names(exploratory_data))
 ```
 
 ```{r}
@@ -86,7 +79,7 @@ names(breed_traits)<-
 
 # Abstract
 
-The ideas of small dog breeds having "Little Dog Syndrome" and large dog breeds being "Gentle Giants"come mostly from social expectations of these dog breeds. America's favorite large and small dog breeds were used to test these social ideas. The data was consistent with large dogs indeed being "gentle giants." However, the idea of "Little Dog Syndrome" was tested and found not to be shown in the data set as analyzed.
+The ideas of small dog breeds having "Little Dog Syndrome" and large dog breeds being "Gentle Giants"come mostly from social expectations of these dog breeds. America's favorite large and small dog breeds were used to test these social ideas. The data was consistent with certain breeds of large dogs indeed being "gentle giants." However, the idea of "Little Dog Syndrome" was tested and found not to be shown in the data set as analyzed. Following analysis questions about data collection as well as collector bias were raised. There are many breeds accounted for on this
 
 # Introduction
 
@@ -106,13 +99,17 @@ The top 10 Large and Small dog breeds will be selected to narrow the data set. D
 
 ```{r}
 breed_rank_all %>%
-  select("x2020_rank", breed)
+  select("x2020_rank", breed) %>%
+kbl() %>%
+  kable_material(c("striped", "hover"))
 ```
 
 ```{r}
 breed_rank_all %>%
   select("x2020_rank", breed) %>%
-  filter(breed == "Retrievers (Labrador)"| breed == "German Shepherd Dogs" | breed == "Retrievers (Golden)" | breed == "Poodles" | breed== "Rottweilers" | breed == "Pointers (German Shorthaired)" | breed == "Australian Shepherds" | breed == "Boxers" | breed == "Great Danes" | breed == "Siberian Huskies")
+  filter(breed == "Retrievers (Labrador)"| breed == "German Shepherd Dogs" | breed == "Retrievers (Golden)" | breed == "Poodles" | breed== "Rottweilers" | breed == "Pointers (German Shorthaired)" | breed == "Australian Shepherds" | breed == "Boxers" | breed == "Great Danes" | breed == "Siberian Huskies") %>%
+kbl() %>%
+  kable_material(c("striped", "hover"))
 ```
 
 List of top ten large dog breeds to be used for the sake of testing hypothesis: If there is truth to the social idea of big dogs being “Gentle Giants,” then larger dog breeds will score favorably in good with young children and other dogs, openness to strangers, and watchdog/protective nature.
@@ -120,7 +117,9 @@ List of top ten large dog breeds to be used for the sake of testing hypothesis: 
 ```{r}
 breed_rank_all %>%
   select("x2020_rank", breed) %>%
-  filter(breed == "French Bulldogs"| breed == "Dachshunds" | breed == "Pembroke Welsh Corgis" | breed == "Yorkshire Terriers" | breed == "Cavalier King Charles Spaniels" | breed == "Miniature Schnauzers" | breed == "Shih Tzu" | breed == "Boston Terriers" | breed == "Pomeranians" | breed == "Havanese")
+  filter(breed == "French Bulldogs"| breed == "Dachshunds" | breed == "Pembroke Welsh Corgis" | breed == "Yorkshire Terriers" | breed == "Cavalier King Charles Spaniels" | breed == "Miniature Schnauzers" | breed == "Shih Tzu" | breed == "Boston Terriers" | breed == "Pomeranians" | breed == "Havanese") %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
 ```
 
 List of top ten small dog breeds to be used to test Hypothesis: If there is truth to the idea of “Little Dog Syndrome,” then smaller dog breeds will score unfavorably for trait scores in openness to strangers, trainability, energy level, and barking level.
@@ -132,7 +131,9 @@ attempt filter command according to slack instructions identify column numbers
 ```{r}
 breed_traits %>%
    select(breed, `watchdog_protective_nature`, `good_with_young_children`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
-  slice(1, 3, 4, 6, 8, 12, 14, 15, 16, 18)
+  slice(1, 3, 4, 6, 8, 12, 14, 15, 16, 18) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
 ```
 
 Large dogs scored consistently with the idea of large breeds being "Gentle Giants". The selected large dog breeds scored well in every selected trait category with little exception
@@ -142,11 +143,180 @@ Large dogs scored consistently with the idea of large breeds being "Gentle Giant
 ```{r}
 breed_traits %>%
    select(breed, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
-  slice(2, 10, 11, 13, 17, 19, 20, 21, 23, 24)
+  slice(2, 10, 11, 13, 17, 19, 20, 21, 23, 24) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
 ```
 
 The only scores consistent with the idea of "Little Dog Syndrome" are the score trends for energy and barking levels. With a few exceptions the small breeds tend to have a higher energy level and higher barking levels. The small dog breeds scored well with consideration to being good with other dogs and strangers as well as their trainability scores.
 
 # Acknowledgment of Bias
 
-Selecting the top breeds for each size group may prove problematic due to a higher breed rank, most likely being some of the best-behaved of each group. It may be better to select from all across the breed rank list or perhaps also look at the lowest scorers in terms of rank to see if they also following the trends. Selecting the breeds to be used based off of how they ranked could bias the data in favor of the dog sizes being better behaved than is truthful for the trend of such breeds.
+Selecting the top breeds for each size group may prove problematic due to a higher breed rank, most likely being some of the best-behaved of each group. It may be better to select from all across the breed rank list or perhaps also look at the lowest scorers in terms of rank as well as mid ranks to see if they also follow the trends seen thus far in the top ranks. Selecting the breeds to be used based off of how they ranked could bias the data in favor of the dog sizes being better behaved than is truthful for the trend of such breeds.
+
+## Large Dogs (Lowest Ranks)
+
+```{r}
+breed_traits %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_young_children`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
+  slice(193, 189, 166, 178, 174, 177, 185, 180, 186, 173) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+## Small Dogs (Lowest Ranks)
+
+```{r}
+breed_traits %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
+  slice(176, 187, 183, 175, 172, 181, 169, 165, 168, 191) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+MAKE SURE TO MAKE TRAITS CONSISTENT ACROSS STUDIES. ALSO MAKE SURE TO MAKE TRAIT ORDER CONSISTENT
+
+# Large Breeds (Mid-Ranks)
+
+```{r}
+breed_traits %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
+  slice(74, 82, 84, 90, 91, 98, 100, 102, 103, 106) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+# Small Breeds (Mid-Ranks)
+
+```{r}
+breed_traits %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
+  slice(78, 80, 83, 89, 95, 97, 104, 108, 109, 111) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `good_with_young_children`) %>%
+  filter(`good_with_young_children` == 1) %>%
+  kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `openness_to_strangers`) %>%
+  filter(`openness_to_strangers` == 1) %>%
+    kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `trainability_level`) %>%
+  filter(`trainability_level` == 1) %>%
+    kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `good_with_other_dogs`) %>%
+  filter(`good_with_other_dogs` == 1)
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `barking_level`) %>%/
+  filter(`barking_level` == 5) %>%
+    kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `watchdog_protective_nature`) %>%
+  filter(`watchdog_protective_nature` == 1) %>%
+    kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  select(breed, `energy_level`) %>%
+  filter(`energy_level` == 5) %>%
+    kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  count(barking_level == 5) %>%
+kbl() %>%
+  kable_material(c("striped", "hover"))
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = barking_level)) +
+  labs(title ="Distribution of Barking Level Scores",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = good_with_young_children)) +
+  labs(title ="Distribution of Score for Good with Young Children",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = good_with_other_dogs),
+           color = "aquamarine",
+           fill = "darkseagreen2") +
+  labs(title ="Distribution of Scores for Good with Other Dogs",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = trainability_level)) +
+  labs(title ="Distribution of Trainability Level Scores",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = energy_level)) +
+  labs(title ="Distribution of Energy Level Scores",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = watchdog_protective_nature)) +
+  labs(title ="Distribution of Watchdog Protective Nature Scores",
+       y = "Score", x = "Number of Occurances")
+```
+
+```{r}
+breed_traits %>%
+  ggplot() +
+  geom_bar(mapping = aes (x = openness_to_strangers)) +
+  labs(title ="Distribution of Openness to Strangers Scores",
+       y = "Score", x = "Number of Occurances")
+```
+
+# Conclusions
+
+Dogs have long been considered man's best friend, and much conversation have come about reguarding which breed is the best. For these reasons dogs have been ranked and given scores based on many factors. This data set and analysis uses the over all ranks and trait scores of 197 breeds were considered as part of this analysis.
+
+Questions about data collection and possible biases were raised upon completion of data analysis. A few areas have raised concern for example- there are multiple breed traits for which there is very few or even only a single breed which has been assigned a score of either extreme. For example for the breed trait Good With Young Children, only the Chihuahua has been assigned the score of 1 on a scale to five indicating that Chihuahuas are not good with children. Another area that raised questions is the extreme high data for Energy Level there are no dogs who were asigned an energy level of 1 and there were only NUMBER of dogs assigned the score two. Such a pattern draws one to believe the scale of judgment would do better if adjusted. In addition for the breeds who were assigned a score of 5 the large majority are large breeds. This begs the question of how this was tested for, is the score of energy level factoring in the ease of care associated with each dog? I think that it is as it would be harder for most to deal with a high energy large dog than it would be to deal with a high energy small dog. If this was factored into the scores then it would bias the scale.
