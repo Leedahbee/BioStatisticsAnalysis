@@ -79,13 +79,13 @@ names(breed_traits)<-
 
 # Abstract
 
-The ideas of small dog breeds having "Little Dog Syndrome" and large dog breeds being "Gentle Giants"come mostly from social expectations of these dog breeds. America's favorite large and small dog breeds were used to test these social ideas. The data was consistent with certain breeds of large dogs indeed being "gentle giants." However, the idea of "Little Dog Syndrome" was tested and found not to be shown in the data set as analyzed. Following analysis questions about data collection as well as collector bias were raised. There are many breeds accounted for on this
+The ideas of small dog breeds having "Little Dog Syndrome" and large dog breeds being "Gentle Giants"come mostly from social expectations of these dog breeds. America's favorite large and small dog breeds were used to test these social ideas. The data was consistent with certain breeds of large dogs indeed being "gentle giants", though this is not strongly supported as the data was not extremely in favor, it was more so a lack of low scorers overall whether small or large dog breed. The idea of "Little Dog Syndrome" was also tested and found not to be shown in the data set as analyzed, the data did not show a strong trend for traits associated with "Little Dog Syndrome". Following analysis questions about data collection as well as collector bias were raised. There are many breeds accounted for on this list yet for some traits tested for there were extremely few breeds for which an extreme score was recorded.
 
 # Introduction
 
 Dogs are often called man's best friend. However, there are just so many dog breeds. The personality of a dog can vary widely based on a number of different factors, including breed. The type of dog preferred by any one person depends on multitudinous factors such as cuteness, size, coat type, and personality traits. A person's opinion of small and large dog breeds commonly comes from a small handful of strongly positive or negative experiences with such dogs. Those who feel strongly about their favorite breeds of dogs may have biases for many reasons, including the social ideas of "Little Dog Syndrome" and larger dogs being considered "Gentle Giants".
 
-"Little Dog Syndrome" is a term used to describe the personality traits of smaller dogs. Often, it is used to accuse small dog breeds of being quite barky, less trainable, not open to strangers, and hyper. The idea of large dogs being "Gentle Giants" is often used by rescue groups who explain that the bad reputation given to large dog breeds comes from bad owners and it is in the nature of large dogs to not act badly. These "Gentle Giants" are more likely to be good with children and other dogs, more open to strangers, and more protective of their homes and families.
+"Little Dog Syndrome" is a term used to describe the personality traits of smaller dogs. Often, it is used to accuse small dog breeds of being quite barky, less trainable, not open to strangers, and hyper. The idea of large dogs being "Gentle Giants" is often used by rescue groups who explain that the bad reputation given to large dog breeds comes from bad owners and it is in the nature of large dogs to not act badly. These "Gentle Giants" are more likely to be good with children and other dogs, more open to strangers, and more protective of their homes and families-watch dog like.
 
 # Hypotheses
 
@@ -103,6 +103,8 @@ breed_rank_all %>%
 kbl() %>%
   kable_material(c("striped", "hover"))
 ```
+
+Overall Breed rank list for the year 2020, this is the data set which the breed rankings were pulled from and how they were considered Top, Low or Mid-ranking.
 
 ```{r}
 breed_rank_all %>%
@@ -124,13 +126,11 @@ breed_rank_all %>%
 
 List of top ten small dog breeds to be used to test Hypothesis: If there is truth to the idea of “Little Dog Syndrome,” then smaller dog breeds will score unfavorably for trait scores in openness to strangers, trainability, energy level, and barking level.
 
-# Breed Attributes Analysis Large Dogs
-
-attempt filter command according to slack instructions identify column numbers
+# Breed Attributes Analysis Large Dogs 
 
 ```{r}
 breed_traits %>%
-   select(breed, `watchdog_protective_nature`, `good_with_young_children`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
   slice(1, 3, 4, 6, 8, 12, 14, 15, 16, 18) %>%
   kbl() %>%
   kable_material(c("striped", "hover"))
@@ -142,7 +142,7 @@ Large dogs scored consistently with the idea of large breeds being "Gentle Giant
 
 ```{r}
 breed_traits %>%
-   select(breed, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
   slice(2, 10, 11, 13, 17, 19, 20, 21, 23, 24) %>%
   kbl() %>%
   kable_material(c("striped", "hover"))
@@ -158,11 +158,13 @@ Selecting the top breeds for each size group may prove problematic due to a high
 
 ```{r}
 breed_traits %>%
-   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_young_children`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`) %>%
+   select(breed, `watchdog_protective_nature`, `energy_level`, `barking_level`, `good_with_other_dogs`, `openness_to_strangers`, `trainability_level`, `good_with_young_children`) %>%
   slice(193, 189, 166, 178, 174, 177, 185, 180, 186, 173) %>%
   kbl() %>%
   kable_material(c("striped", "hover"))
 ```
+
+There are very few data trends with the scores. Most breeds score somewhere in the middle, however, some traits appear to be skewed middling, such as good with children.
 
 ## Small Dogs (Lowest Ranks)
 
@@ -174,7 +176,7 @@ breed_traits %>%
   kable_material(c("striped", "hover"))
 ```
 
-MAKE SURE TO MAKE TRAITS CONSISTENT ACROSS STUDIES. ALSO MAKE SURE TO MAKE TRAIT ORDER CONSISTENT
+Scores are not super strong in either direction. Most ranks are somewhere in the middle.
 
 # Large Breeds (Mid-Ranks)
 
@@ -196,6 +198,10 @@ breed_traits %>%
   kable_material(c("striped", "hover"))
 ```
 
+Scores are extremely middling, there are few outliers. While one would expect a normal distribution, some of the data sets seem to skew weirdly. Overall not consistent with "Little Dog Syndrome" critieria.
+
+# Identifying Data Abnormalities
+
 ```{r}
 breed_traits %>%
   select(breed, `good_with_young_children`) %>%
@@ -204,13 +210,7 @@ breed_traits %>%
   kable_material(c("striped", "hover"))
 ```
 
-```{r}
-breed_traits %>%
-  select(breed, `openness_to_strangers`) %>%
-  filter(`openness_to_strangers` == 1) %>%
-    kbl() %>%
-  kable_material(c("striped", "hover"))
-```
+Only a single breed was assigned a score of 1 for breed trait, good with young children. It is very abnormal for only one breed out of 196 others to be the only one scored in such a way.
 
 ```{r}
 breed_traits %>%
@@ -220,103 +220,59 @@ breed_traits %>%
   kable_material(c("striped", "hover"))
 ```
 
-```{r}
-breed_traits %>%
-  select(breed, `good_with_other_dogs`) %>%
-  filter(`good_with_other_dogs` == 1)
-```
+Another trait for which only a single breed scored strongly toward the lower extreme.
 
 ```{r}
 breed_traits %>%
-  select(breed, `barking_level`) %>%/
-  filter(`barking_level` == 5) %>%
-    kbl() %>%
-  kable_material(c("striped", "hover"))
-```
-
-```{r}
-breed_traits %>%
-  select(breed, `watchdog_protective_nature`) %>%
-  filter(`watchdog_protective_nature` == 1) %>%
-    kbl() %>%
-  kable_material(c("striped", "hover"))
-```
-
-```{r}
-breed_traits %>%
-  select(breed, `energy_level`) %>%
-  filter(`energy_level` == 5) %>%
-    kbl() %>%
-  kable_material(c("striped", "hover"))
-```
-
-```{r}
-breed_traits %>%
-  count(barking_level == 5) %>%
+  count(energy_level == 2) %>%
 kbl() %>%
   kable_material(c("striped", "hover"))
 ```
 
+Only two dog breeds out of 195 are considered to have an energy level ranked 2.
+
 ```{r}
 breed_traits %>%
   ggplot() +
-  geom_bar(mapping = aes (x = barking_level)) +
+  geom_bar(mapping = aes (x = barking_level),
+            color = "aquamarine",
+           fill = "darkseagreen2") +
   labs(title ="Distribution of Barking Level Scores",
        y = "Score", x = "Number of Occurances")
 ```
 
+This is a more normal looking graph of how scores trends should follow. I would expect all the score trends to look something like this even if slightly higher or lower.
+
 ```{r}
 breed_traits %>%
   ggplot() +
-  geom_bar(mapping = aes (x = good_with_young_children)) +
+  geom_bar(mapping = aes (x = good_with_young_children),
+            color = "aquamarine",
+           fill = "darkseagreen2") +
   labs(title ="Distribution of Score for Good with Young Children",
        y = "Score", x = "Number of Occurances")
 ```
 
+This type of data distribution is incredibly out of the ordinary. This suggests likely a bias or not sensitive enough a scale.
+
 ```{r}
 breed_traits %>%
   ggplot() +
-  geom_bar(mapping = aes (x = good_with_other_dogs),
+  geom_bar(mapping = aes (x = energy_level),
            color = "aquamarine",
            fill = "darkseagreen2") +
-  labs(title ="Distribution of Scores for Good with Other Dogs",
-       y = "Score", x = "Number of Occurances")
-```
-
-```{r}
-breed_traits %>%
-  ggplot() +
-  geom_bar(mapping = aes (x = trainability_level)) +
-  labs(title ="Distribution of Trainability Level Scores",
-       y = "Score", x = "Number of Occurances")
-```
-
-```{r}
-breed_traits %>%
-  ggplot() +
-  geom_bar(mapping = aes (x = energy_level)) +
   labs(title ="Distribution of Energy Level Scores",
        y = "Score", x = "Number of Occurances")
 ```
 
-```{r}
-breed_traits %>%
-  ggplot() +
-  geom_bar(mapping = aes (x = watchdog_protective_nature)) +
-  labs(title ="Distribution of Watchdog Protective Nature Scores",
-       y = "Score", x = "Number of Occurances")
-```
-
-```{r}
-breed_traits %>%
-  ggplot() +
-  geom_bar(mapping = aes (x = openness_to_strangers)) +
-  labs(title ="Distribution of Openness to Strangers Scores",
-       y = "Score", x = "Number of Occurances")
-```
+This chart trends heavily to the high middle and high end, suggesting that it would be better to adjust the scale to made it so the middling scores can be separated out.
 
 # Conclusions
 
-Dogs have long been considered man's best friend, and much conversation have come about reguarding which breed is the best. For these reasons dogs have been ranked and given scores based on many factors. This data set and analysis uses the over all ranks and trait scores of 197 breeds were considered as part of this analysis.
+Dogs have long been considered man's best friend, and much conversation has occurred regarding the best breed. For these reasons, dogs have been ranked and given scores based on many factors. This data set and analysis use the overall ranks and trait scores of 197 breeds considered as part of this analysis. Breeds were ranked based on traits such as how open they are to strangers, how good they are with children, and how trainable they are. These rankings were on a scale of 1-5. This analysis aimed to determine if there was any support for small dogs having “Little Dog Syndrome” or large dogs being considered “Gentle Giants”.
 
-Questions about data collection and possible biases were raised upon completion of data analysis. A few areas have raised concern for example- there are multiple breed traits for which there is very few or even only a single breed which has been assigned a score of either extreme. For example for the breed trait Good With Young Children, only the Chihuahua has been assigned the score of 1 on a scale to five indicating that Chihuahuas are not good with children. Another area that raised questions is the extreme high data for Energy Level there are no dogs who were asigned an energy level of 1 and there were only NUMBER of dogs assigned the score two. Such a pattern draws one to believe the scale of judgment would do better if adjusted. In addition for the breeds who were assigned a score of 5 the large majority are large breeds. This begs the question of how this was tested for, is the score of energy level factoring in the ease of care associated with each dog? I think that it is as it would be harder for most to deal with a high energy large dog than it would be to deal with a high energy small dog. If this was factored into the scores then it would bias the scale.
+Testing for “Little Dog Syndrome” involved comparing small dog breeds' rankings in the categories of Barking Level, Energy Level, Openness to Strangers, and Trainability Level. The data did not suggest that breed size impacted the dogs' performance in these categories. The data was mainly middling on most traits, with a few notable outliers. Testing for “Gentle Giants” involved looking at how large dog breeds scored in categories: Good with Young Children, Good With other Dogs, Openness to Strangers, Watchdog Protective Nature—most data for this skewed high or middling. At first, the data appeared to be mostly in favor of this idea, however, no dogs large or small scored consistently poorly in all categories tested to answer this question. 
+
+Questions about data collection methodology and possible biases were raised upon completion of data analysis. A few areas have raised concern, for example, there are multiple breed traits for which there are very few or even only a single breed that has been assigned a score of either extreme. For example, for the breed trait Good With Young Children, only the Chihuahua has been assigned a score of 1 on a scale of five, indicating that Chihuahuas are not good with children. Another area that raised questions is the extremely high data for Energy Level; no dogs were assigned an energy level of 1, and only two dog breeds were assigned the score 2. Such a pattern draws one to believe the scale of judgment would do better if adjusted. In addition, the majority of the breeds that were assigned a score of 5 are large breeds. This begs the question of how this was tested. Is the score of energy level factoring in the ease of care associated with each dog? I think that it is as it would be harder for most to deal with a high energy large dog than it would be to deal with a high energy small dog. If this were factored into the scores, it would bias the scale. 
+
+Due to such questions being raised, conclusions cannot be drawn for either hypothesis tested. In general, no data trends were consistent with “Little Dog Syndrome” in the trait categories analyzed. However, for some categories, very few or even no dog breed, regardless of size, would have scored negatively for all these traits. A similar case is true for “Gentle Giants” where most dog breeds, regardless of size, score well in the categories analyzed, suggesting all dogs have some level of gentleness, which would not make a case for it being more accurate for large dogs. There may be some data collection bias present, the sourcing of data and how each category was tested for were unavailable or noninformative. This does not necessarily mean that the data is wrong, though. Perhaps these inconsistencies and a lack of normal distribution for specific trait score frequencies suggest more about dogs being a product of their upbringing. Many dog owners say it is not the breed that makes a dog the way it is, the owner is responsible, meaning all dogs can be excellent additions to anyone’s family regardless of their size, as long as the conditions are right and the owners are good ones.
